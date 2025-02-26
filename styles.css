@@ -5,38 +5,62 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #1a1a1a; /* Тёмный фон, как на лампе */
+    background: #0a0a0a; /* Очень тёмный фон */
     font-family: Arial, sans-serif;
 }
 
 .game-wrapper {
     text-align: center;
     padding: 20px;
-    background: rgba(0, 0, 0, 0.8); /* Полупрозрачный тёмный фон */
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); /* Лёгкое свечение */
+    background: rgba(20, 20, 20, 0.9); /* Тёмный полупрозрачный фон */
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
-    color: #ffd700; /* Золотистый текст для яркости */
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.3); /* Эффект свечения */
+    color: #b30000; /* Тёмно-красный текст */
+    text-shadow: 0 0 5px rgba(179, 0, 0, 0.7);
     font-size: clamp(1.5rem, 5vw, 3rem); /* Адаптивный размер текста */
 }
 
 #game {
-    border: 5px solid #ffd700; /* Золотая рамка, как на лампе */
-    border-radius: 10px;
-    background: #2c2c2c; /* Тёмный фон поля */
+    border: 3px solid #4a0000; /* Тёмно-бордовый контур */
+    border-radius: 8px;
+    background: #1a1a1a; /* Тёмный фон поля */
     max-width: 100%;
     height: auto;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); /* Лёгкое свечение */
+    box-shadow: 0 0 10px rgba(74, 0, 0, 0.3);
+}
+
+.controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+button {
+    font-size: 1.5rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #4a0000; /* Тёмно-бордовый фон кнопок */
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 5px #2a0000, 0 0 5px rgba(74, 0, 0, 0.5); /* Тёмная тень */
+    transition: all 0.2s;
+}
+
+button:active {
+    transform: translateY(5px);
+    box-shadow: none;
 }
 
 p {
     font-size: 1.2rem;
-    color: #ffd700; /* Золотистый текст для консистентности */
+    color: #b30000; /* Тёмно-красный текст */
     margin-top: 10px;
-    text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+    text-shadow: 0 0 3px rgba(179, 0, 0, 0.5);
 }
 
 /* Адаптивность */
@@ -45,5 +69,9 @@ p {
         width: 100%;
         height: calc(100vw * 2); /* Соотношение 320:640 */
         max-height: 640px;
+    }
+    button {
+        font-size: 1.2rem;
+        padding: 8px 15px;
     }
 }
