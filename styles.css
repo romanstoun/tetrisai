@@ -5,7 +5,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: #1a1a1a; /* Тёмный фон, как на изображении */
+    background: #1a1a1a; /* Тёмный фон, как на лампе */
     font-family: Arial, sans-serif;
 }
 
@@ -20,40 +20,16 @@ body {
 h1 {
     color: #ffd700; /* Золотистый текст для яркости */
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.7), 0 0 20px rgba(255, 215, 0, 0.3); /* Эффект свечения */
-    font-size: clamp(1.5rem, 5vw, 3rem);
+    font-size: clamp(1.5rem, 5vw, 3rem); /* Адаптивный размер текста */
 }
 
-#tetris {
+#game {
     border: 5px solid #ffd700; /* Золотая рамка, как на лампе */
     border-radius: 10px;
     background: #2c2c2c; /* Тёмный фон поля */
     max-width: 100%;
     height: auto;
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.2); /* Лёгкое свечение */
-}
-
-.controls {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-button {
-    font-size: 1.5rem;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 50%;
-    background: #ffd700; /* Золотистые кнопки в стиле лампы */
-    color: #1a1a1a;
-    cursor: pointer;
-    box-shadow: 0 5px #ff8c00, 0 0 10px rgba(255, 215, 0, 0.5); /* Оранжевый акцент и свечение */
-    transition: all 0.2s;
-}
-
-button:active {
-    transform: translateY(5px);
-    box-shadow: none;
 }
 
 p {
@@ -65,13 +41,9 @@ p {
 
 /* Адаптивность */
 @media (max-width: 600px) {
-    #tetris {
+    #game {
         width: 100%;
-        height: calc(100vw * 1.67);
-        max-height: 400px;
-    }
-    button {
-        font-size: 1.2rem;
-        padding: 8px 15px;
+        height: calc(100vw * 2); /* Соотношение 320:640 */
+        max-height: 640px;
     }
 }
