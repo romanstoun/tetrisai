@@ -30,13 +30,13 @@ const tetrominos = {
 };
 
 const colors = {
-    'I': '#87ceeb', // Светло-голубой
-    'O': '#ffff99', // Жёлтый
-    'T': '#9370db', // Фиолетовый
-    'S': '#98ff98', // Светло-зелёный
-    'Z': '#ff4500', // Оранжевый-красный
-    'J': '#0000ff', // Синий
-    'L': '#ffa500'  // Оранжевый
+    'I': '#003399', // Тёмно-синий
+    'O': '#663300', // Тёмно-коричневый
+    'T': '#660066', // Тёмно-фиолетовый
+    'S': '#006600', // Тёмно-зелёный
+    'Z': '#990000', // Тёмно-красный
+    'J': '#000066', // Очень тёмно-синий
+    'L': '#993300'  // Тёмно-оранжевый
 };
 
 function getRandomInt(min, max) {
@@ -111,7 +111,7 @@ function showGameOver() {
     context.globalAlpha = 0.75;
     context.fillRect(0, canvas.height / 2 - 30, canvas.width, 60);
     context.globalAlpha = 1;
-    context.fillStyle = '#ffd700';
+    context.fillStyle = '#b30000'; // Тёмно-красный текст
     context.font = '36px monospace';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
@@ -127,7 +127,7 @@ function draw() {
             if (playfield[row][col]) {
                 context.fillStyle = colors[playfield[row][col]];
                 context.fillRect(col * grid, row * grid, grid - 1, grid - 1);
-                context.strokeStyle = '#ffd700';
+                context.strokeStyle = '#4a0000'; // Тёмно-бордовый контур
                 context.lineWidth = 1;
                 context.strokeRect(col * grid, row * grid, grid - 1, grid - 1);
             }
@@ -136,26 +136,6 @@ function draw() {
 
     // Отрисовка текущего тетромино
     if (tetromino) {
-        context.fillStyle = colors[tetromino.name];
-        for (let r = 0; r < tetromino.matrix.length; r++) {
-            for (let c = 0; c < tetromino.matrix[r].length; c++) {
-                if (tetromino.matrix[r][c]) {
-                    context.fillRect((tetromino.col + c) * grid, (tetromino.row + r) * grid, grid - 1, grid - 1);
-                    context.strokeStyle = '#ffd700';
-                    context.lineWidth = 1;
-                    context.strokeRect((tetromino.col + c) * grid, (tetromino.row + r) * grid, grid - 1, grid - 1);
-                }
-            }
-        }
-    }
-}
-
-function loop(timestamp) {
-    if (!gameOver) {
-        rAF = requestAnimationFrame(loop);
-        draw();
-
-        // Падение фигур каждые 35 кадров (или 0.5 секунды при 60 FPS)
         if (++count > 35) {
             tetromino.row++;
             count = 0;
@@ -164,75 +144,87 @@ function loop(timestamp) {
                 placeTetromino();
             }
         }
+
+        context.fillStyle = colors[tetromino.name];
+        for (let r = 0; r < tetromino.matrix.length; r++) {
+            for (let c = 0; c < tetromino.matrix[r].length; c++) {
+                if (tetromino.matrix[r][c]) {
+                    context.fillRect((tetromino.col + c) * grid, (tetromino.row + r) * grid, grid - 1, grid - 1);
+                    context.strokeStyle = '#4a0000';
+                    context.lineWidth = 1;
+                    context.strokeRect((tetromino.col + c) * grid, (tetromino.row + r) * grid, grid - 1, grid - 1);
+                }
+            }
+        }
     }
 }
 
-// Сенсорное управление свайпами
-let touchStartX = 0;
-let touchStartY = 0;
-
-canvas.addEventListener('touchstart', (e) => {
-    if (gameOver) return;
-    touchStartX = e.changedTouches[0].screenX;
-    touchStartY = e.changedTouches[0].screenY;
-});
-
-canvas.addEventListener('touchend', (e) => {
-    if (gameOver) return;
-    const touchEndX = e.changedTouches[0].screenX;
-    const touchEndY = e.changedTouches[0].screenY;
-    const deltaX = touchEndX - touchStartX;
-    const deltaY = touchEndY - touchStartY;
-
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        // Горизонтальное движение (влево/вправо)
-        if (deltaX > 50) {
-            const col = tetromino.col + 1;
-            if (isValidMove(tetromino.matrix, tetromino.row, col)) {
-                tetromino.col = col;
-            }
-        } else if (deltaX < -50) {
-            const col = tetromino.col - 1;
-            if (isValidMove(tetromino.matrix, tetromino.row, col)) {
-                tetromino.col = col;
-            }
-        }
-    } else {
-        // Вертикальное движение (вниз/поворот)
-        if (deltaY > 50) {
-            const row = tetromino.row + 1;
-            if (!isValidMove(tetromino.matrix, row, tetromino.col)) {
-                tetromino.row = row - 1;
-                placeTetromino();
-                return;
-            }
-            tetromino.row = row;
-        } else if (deltaY < -50) {
-            // Поворот (аналог клавиши вверх)
-            const matrix = rotate(tetromino.matrix);
-            if (isValidMove(matrix, tetromino.row, tetromino.col)) {
-                tetromino.matrix = matrix;
-            }
-        }
+function loop() {
+    if (!gameOver) {
+        rAF = requestAnimationFrame(loop);
+        draw();
     }
+}
+
+// Кнопочное управление для сенсорного экрана
+document.getElementById('left').addEventListener('click', () => {
+    if (gameOver) return;
+    const col = tetromino.col - 1;
+    if (isValidMove(tetromino.matrix, tetromino.row, col)) {
+        tetromino.col = col;
+    }
+    draw();
 });
 
-// Клавиатура для теста на ПК
+document.getElementById('right').addEventListener('click', () => {
+    if (gameOver) return;
+    const col = tetromino.col + 1;
+    if (isValidMove(tetromino.matrix, tetromino.row, col)) {
+        tetromino.col = col;
+    }
+    draw();
+});
+
+document.getElementById('rotate').addEventListener('click', () => {
+    if (gameOver) return;
+    const matrix = rotate(tetromino.matrix);
+    if (isValidMove(matrix, tetromino.row, tetromino.col)) {
+        tetromino.matrix = matrix;
+    }
+    draw();
+});
+
+document.getElementById('down').addEventListener('click', () => {
+    if (gameOver) return;
+    const row = tetromino.row + 1;
+    if (!isValidMove(tetromino.matrix, row, tetromino.col)) {
+        tetromino.row = row - 1;
+        placeTetromino();
+        return;
+    }
+    tetromino.row = row;
+    draw();
+});
+
+// Клавиатура для теста на ПК (по желанию)
 document.addEventListener('keydown', function(e) {
     if (gameOver) return;
-    if (e.which === 37 || e.which === 39) {
-        const col = e.which === 37 ? tetromino.col - 1 : tetromino.col + 1;
+    if (e.which === 37) {
+        const col = tetromino.col - 1;
         if (isValidMove(tetromino.matrix, tetromino.row, col)) {
             tetromino.col = col;
         }
-    }
-    if (e.which === 38) {
+    } else if (e.which === 39) {
+        const col = tetromino.col + 1;
+        if (isValidMove(tetromino.matrix, tetromino.row, col)) {
+            tetromino.col = col;
+        }
+    } else if (e.which === 38) {
         const matrix = rotate(tetromino.matrix);
         if (isValidMove(matrix, tetromino.row, tetromino.col)) {
             tetromino.matrix = matrix;
         }
-    }
-    if (e.which === 40) {
+    } else if (e.which === 40) {
         const row = tetromino.row + 1;
         if (!isValidMove(tetromino.matrix, row, tetromino.col)) {
             tetromino.row = row - 1;
@@ -241,6 +233,7 @@ document.addEventListener('keydown', function(e) {
         }
         tetromino.row = row;
     }
+    draw();
 });
 
 // Запуск игры
